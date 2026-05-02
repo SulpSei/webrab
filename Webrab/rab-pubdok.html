@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAB & Bon — Sie Pubdok 2026</title>
+<style>
+  :root {
+    --gold: #F5A623;
+    --gold-dark: #BA7517;
+    --gold-light: #FAEEDA;
+    --gold-mid: #FAC775;
+    --green: #27500A;
+    --green-light: #EAF3DE;
+    --red: #A32D2D;
+    --red-light: #FCEBEB;
+    --blue: #185FA5;
+    --blue-light: #E6F1FB;
+    --gray-bg: #F8F6F0;
+    --gray-border: #E5E0D5;
+    --text: #2C2C2A;
+    --text-muted: #888780;
+    --white: #ffffff;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gray-bg); color: var(--text); min-height: 100vh; }
+
+  /* HEADER */
+  .app-header {
+    background: linear-gradient(135deg, #F5A623 0%, #EF9F27 60%, #BA7517 100%);
+    color: #412402;
+    padding: 1.5rem 2rem;
+    display: flex; align-items: center; gap: 1rem;
+    box-shadow: 0 2px 16px rgba(245,166,35,0.3);
+  }
+  .app-header .logo {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: rgba(255,255,255,0.28);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; flex-shrink: 0;
+  }
+  .app-header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  .app-header p { font-size: 13px; opacity: 0.8; margin-top: 2px; }
+
+  /* TABS */
+  .tabs-wrap { background: var(--white); border-bottom: 1px solid var(--gray-border); padding: 0 2rem; display: flex; gap: 0; overflow-x: auto; }
+  .tab-btn {
+    padding: 14px 22px; font-size: 14px; font-weight: 500; border: none; background: none;
+    cursor: pointer; color: var(--text-muted); border-bottom: 3px solid transparent;
+    white-space: nowrap; transition: all 0.18s;
+  }
+  .tab-btn.active { color: var(--gold-dark); border-bottom-color: var(--gold); }
+  .tab-btn:hover:not(.active) { color: var(--text); background: var(--gray-bg); }
+
+  /* CONTENT */
+  .content { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* STAT CARDS */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+  .stat-card { background: var(--white); border-radius: var(--radius); padding: 16px; border: 1px solid var(--gray-border); }
+  .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--gold-dark); }
+  .stat-value.green { color: var(--green); }
+  .stat-value.blue { color: var(--blue); }
+
+  /* SECTION HEADER */
+  .sec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .sec-header h2 { font-size: 17px; font-weight: 600; color: var(--text); }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.15s; text-decoration: none;
+  }
+  .btn-primary { background: var(--gold); color: #412402; }
+  .btn-primary:hover { background: var(--gold-dark); color: #fff; }
+  .btn-danger { background: var(--red-light); color: var(--red); border: 1px solid #f7c1c1; }
+  .btn-danger:hover { background: var(--red); color: #fff; }
+  .btn-edit { background: var(--blue-light); color: var(--blue); border: 1px solid #b5d4f4; }
+  .btn-edit:hover { background: var(--blue); color: #fff; }
+  .btn-sm { padding: 5px 11px; font-size: 12px; }
+  .btn-ghost { background: transparent; border: 1px solid var(--gray-border); color: var(--text-muted); }
+  .btn-ghost:hover { background: var(--gray-bg); color: var(--text); }
+
+  /* TABLE */
+  .table-wrap { background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-border); overflow: hidden; margin-bottom: 1.5rem; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { background: var(--gold-light); color: var(--gold-dark); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 14px; text-align: left; }
+  tbody td { padding: 11px 14px; border-bottom: 1px solid var(--gray-border); font-size: 13.5px; vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #FFFDF7; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tfoot td { background: var(--gold-light); font-weight: 700; color: var(--gold-dark); padding: 10px 14px; font-size: 14px; border-top: 2px solid var(--gold-mid); }
+
+  /* BON CARDS */
+  .bon-grid { display: grid; gap: 16px; }
+  .bon-card {
+    background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-border);
+    overflow: hidden; box-shadow: var(--shadow);
+  }
+  .bon-card-header {
+    background: var(--gold-light); padding: 14px 18px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    border-bottom: 1px solid var(--gold-mid);
+  }
+  .bon-num { font-size: 11px; font-weight: 700; color: var(--gold-dark); text-transform: uppercase; letter-spacing: 0.6px; }
+  .bon-title { font-size: 15px; font-weight: 600; color: var(--text); margin: 2px 0; }
+  .bon-date { font-size: 12px; color: var(--text-muted); }
+  .bon-actions { display: flex; gap: 6px; }
+  .bon-body { padding: 14px 18px; }
+  .bon-items-table { width: 100%; font-size: 13px; margin-bottom: 10px; }
+  .bon-items-table td { padding: 4px 0; }
+  .bon-img-section { margin-top: 10px; }
+  .bon-img-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .bon-img-preview {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .bon-img-thumb {
+    width: 90px; height: 90px; object-fit: cover; border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-border); cursor: pointer; transition: transform 0.15s;
+  }
+  .bon-img-thumb:hover { transform: scale(1.05); }
+  .bon-img-upload {
+    width: 90px; height: 90px; border: 2px dashed var(--gold-mid); border-radius: var(--radius-sm);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--gold-dark); font-size: 11px; text-align: center; transition: all 0.15s;
+    background: var(--gold-light);
+  }
+  .bon-img-upload:hover { background: var(--gold-mid); border-color: var(--gold); }
+  .bon-img-upload .icon { font-size: 22px; margin-bottom: 3px; }
+  .bon-footer { padding: 12px 18px; background: var(--gray-bg); border-top: 1px solid var(--gray-border); display: flex; justify-content: space-between; align-items: center; }
+  .bon-total-label { font-size: 12px; color: var(--text-muted); }
+  .bon-total-amount { font-size: 18px; font-weight: 700; color: var(--gold-dark); }
+  .penerima-chip { background: var(--gold-light); color: var(--gold-dark); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 99px; border: 1px solid var(--gold-mid); }
+  .tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+  .tag-paid { background: var(--green-light); color: var(--green); }
+
+  /* MODAL */
+  .modal-bg {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    z-index: 1000; align-items: center; justify-content: center; padding: 1rem;
+  }
+  .modal-bg.open { display: flex; }
+  .modal {
+    background: var(--white); border-radius: 14px; width: 100%; max-width: 560px;
+    max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg);
+    animation: slideUp 0.22s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--gray-border); display: flex; justify-content: space-between; align-items: center; }
+  .modal-header h3 { font-size: 17px; font-weight: 700; }
+  .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); line-height: 1; }
+  .modal-close:hover { color: var(--red); }
+  .modal-body { padding: 20px 24px; }
+  .modal-footer { padding: 14px 24px; border-top: 1px solid var(--gray-border); display: flex; justify-content: flex-end; gap: 10px; }
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 5px; }
+  .form-control {
+    width: 100%; padding: 9px 12px; border-radius: var(--radius-sm); border: 1px solid var(--gray-border);
+    font-size: 14px; font-family: inherit; background: var(--white); color: var(--text);
+    transition: border-color 0.15s;
+  }
+  .form-control:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(245,166,35,0.15); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ITEM ROWS in modal */
+  .item-rows { border: 1px solid var(--gray-border); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 8px; }
+  .item-row { display: grid; grid-template-columns: 1fr 80px 90px 30px; gap: 6px; padding: 7px 10px; border-bottom: 1px solid var(--gray-border); align-items: center; }
+  .item-row:last-child { border-bottom: none; }
+  .item-row input { padding: 5px 8px; border-radius: 4px; border: 1px solid var(--gray-border); font-size: 13px; width: 100%; }
+  .item-row input:focus { outline: none; border-color: var(--gold); }
+  .add-item-btn { font-size: 12px; color: var(--gold-dark); background: var(--gold-light); border: 1px dashed var(--gold-mid); border-radius: var(--radius-sm); padding: 6px 12px; cursor: pointer; width: 100%; text-align: center; transition: all 0.15s; }
+  .add-item-btn:hover { background: var(--gold-mid); }
+  .remove-item-btn { background: var(--red-light); border: none; color: var(--red); border-radius: 4px; cursor: pointer; width: 26px; height: 26px; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+  .remove-item-btn:hover { background: var(--red); color: #fff; }
+
+  /* LIGHTBOX */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: var(--radius); box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
+  .lightbox-close { position: fixed; top: 16px; right: 20px; background: rgba(255,255,255,0.15); border: none; color: #fff; font-size: 28px; cursor: pointer; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
+
+  /* PROGRESS */
+  .prog-wrap { margin-bottom: 14px; }
+  .prog-head { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+  .prog-name { font-weight: 500; }
+  .prog-amt { color: var(--gold-dark); font-weight: 600; }
+  .prog-bar-bg { height: 10px; background: var(--gray-border); border-radius: 99px; overflow: hidden; }
+  .prog-bar { height: 10px; border-radius: 99px; transition: width 0.4s ease; }
+
+  /* CHART simple */
+  .donut-wrap { display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; padding: 1rem 0; }
+  .legend { display: flex; flex-direction: column; gap: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+  /* ALERT */
+  .alert { padding: 12px 16px; border-radius: var(--radius-sm); font-size: 13px; margin-bottom: 1rem; }
+  .alert-success { background: var(--green-light); color: var(--green); border: 1px solid #c0dd97; }
+  .alert-info { background: var(--blue-light); color: var(--blue); border: 1px solid #b5d4f4; }
+
+  /* CONFIRM MODAL */
+  .confirm-modal { max-width: 380px; }
+
+  /* NO DATA */
+  .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
+  .empty-state .icon { font-size: 40px; margin-bottom: 10px; }
+
+  @media (max-width: 600px) {
+    .content { padding: 1rem; }
+    .app-header { padding: 1rem; }
+    .tabs-wrap { padding: 0 1rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .item-row { grid-template-columns: 1fr 70px 80px 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="logo">📋</div>
+  <div>
+    <h1>RAB & Bon — Sie Pubdok</h1>
+    <p>Rincian Anggaran Biaya &amp; Laporan Pengeluaran 2026</p>
+  </div>
+</div>
+
+<div class="tabs-wrap">
+  <button class="tab-btn active" onclick="switchTab('rab')">📊 RAB</button>
+  <button class="tab-btn" onclick="switchTab('bon')">🧾 Bon / Struk</button>
+  <button class="tab-btn" onclick="switchTab('pembagian')">📈 Pembagian</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== RAB SECTION ===== -->
+  <div class="section active" id="tab-rab">
+    <div class="stat-grid" id="rab-stats"></div>
+    <div class="sec-header">
+      <h2>Rincian Anggaran Biaya</h2>
+      <button class="btn btn-primary" onclick="openRABModal()">＋ Tambah Item</button>
+    </div>
+    <div class="table-wrap">
+      <table id="rab-table">
+        <thead>
+          <tr>
+            <th>No</th><th>Uraian Pemakaian</th><th class="num">Volume</th>
+            <th>Satuan</th><th class="num">@ Harga</th><th class="num">Jumlah (Rp)</th><th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="rab-tbody"></tbody>
+        <tfoot><tr>
+          <td colspan="5" class="tfoot">Jumlah Total</td>
+          <td class="tfoot num" id="rab-total-cell">0</td>
+          <td class="tfoot"></td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== BON SECTION ===== -->
+  <div class="section" id="tab-bon">
+    <div class="stat-grid" id="bon-stats"></div>
+    <div class="sec-header">
+      <h2>Bon & Struk Pengeluaran</h2>
+      <button class="btn btn-primary" onclick="openBonModal()">＋ Tambah Bon</button>
+    </div>
+    <div class="bon-grid" id="bon-grid"></div>
+  </div>
+
+  <!-- ===== PEMBAGIAN SECTION ===== -->
+  <div class="section" id="tab-pembagian">
+    <div class="stat-grid" id="pem-stats"></div>
+    <div class="table-wrap" style="margin-bottom:1.5rem;">
+      <table>
+        <thead><tr><th>Kategori</th><th>Item</th><th class="num">Jumlah (Rp)</th><th class="num">%</th></tr></thead>
+        <tbody id="pem-tbody"></tbody>
+      </table>
+    </div>
+    <div class="table-wrap" style="background:var(--white);border-radius:var(--radius);border:1px solid var(--gray-border);padding:1.25rem;">
+      <div style="font-size:14px;font-weight:600;margin-bottom:1rem;color:var(--text);">Proporsi Pengeluaran per Kategori</div>
+      <div id="progress-bars"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== RAB MODAL ===== -->
+<div class="modal-bg" id="rab-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="rab-modal-title">Tambah Item RAB</h3>
+      <button class="modal-close" onclick="closeModal('rab-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="rab-edit-id">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Uraian Pemakaian</label>
+          <input type="text" class="form-control" id="rab-uraian" placeholder="Nama item...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Satuan</label>
+          <input type="text" class="form-control" id="rab-satuan" placeholder="Paket, Lembar, Buah...">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Volume</label>
+          <input type="number" class="form-control" id="rab-volume" placeholder="1" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">@ Harga (Rp)</label>
+          <input type="number" class="form-control" id="rab-harga" placeholder="0" min="0">
+        </div>
+      </div>
+      <div class="alert alert-info" id="rab-preview" style="display:none;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('rab-modal')">Batal</button>
+      <button class="btn btn-primary" onclick="saveRAB()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BON MODAL ===== -->
+<div class="modal-bg" id="bon-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="bon-modal-title">Tambah Bon</h3>
+      <button class="modal-close" onclick="closeModal('bon-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="bon-edit-id">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Judul / Keperluan</label>
+          <input type="text" class="form-control" id="bon-judul" placeholder="Nama keperluan...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tanggal</label>
+          <input type="date" class="form-control" id="bon-tanggal">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Penerima Dana</label>
+        <input type="text" class="form-control" id="bon-penerima" value="Syawal" placeholder="Nama penerima">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Item / Rincian (opsional)</label>
+        <div class="item-rows" id="bon-item-rows">
+          <div class="item-row" style="background:#f8f6f0;font-size:11px;font-weight:600;color:var(--text-muted);padding:5px 10px;">
+            <span>Nama Item</span><span>Qty</span><span>Harga Satuan</span><span></span>
+          </div>
+        </div>
+        <button class="add-item-btn" onclick="addItemRow()">＋ Tambah Baris Item</button>
+        <div class="form-hint">Biarkan kosong jika bon tidak punya rincian item.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Total Jumlah (Rp)</label>
+        <input type="number" class="form-control" id="bon-total" placeholder="0" min="0">
+        <div class="form-hint">Isi manual jika berbeda dari kalkulasi item di atas.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Upload Foto Bon / Struk</label>
+        <input type="file" id="bon-images-input" accept="image/*" multiple style="display:none" onchange="handleBonImages(this)">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;" id="bon-img-preview-area">
+          <div class="bon-img-upload" onclick="document.getElementById('bon-images-input').click()">
+            <div class="icon">📷</div>
+            <div>Klik upload foto</div>
+          </div>
+        </div>
+        <div class="form-hint">Bisa upload lebih dari 1 foto.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('bon-modal')">Batal</button>
+      <button class="btn btn-primary" onclick="saveBon()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONFIRM DELETE MODAL ===== -->
+<div class="modal-bg" id="confirm-modal">
+  <div class="modal confirm-modal">
+    <div class="modal-header">
+      <h3>⚠️ Konfirmasi Hapus</h3>
+      <button class="modal-close" onclick="closeModal('confirm-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirm-msg" style="font-size:14px;line-height:1.6;">Apakah anda yakin ingin menghapus item ini?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('confirm-modal')">Batal</button>
+      <button class="btn btn-danger" id="confirm-yes-btn">🗑️ Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="Foto Bon">
+</div>
+
+<script>
+// ==================== DATA STORE ====================
+let state = JSON.parse(localStorage.getItem('pubdok_state') || 'null') || {
+  rab: [
+    {id:1, uraian:'Standing Banner', volume:1, satuan:'Paket', harga:50000},
+    {id:2, uraian:'Backdrop 3D', volume:1, satuan:'Paket', harga:450000},
+    {id:3, uraian:'Spanduk (2x1)', volume:1, satuan:'Buah', harga:50000},
+    {id:4, uraian:'Spanduk (3x1)', volume:1, satuan:'Buah', harga:75000},
+    {id:5, uraian:'Badge Peserta', volume:42, satuan:'Lembar', harga:3000},
+    {id:6, uraian:'Sertifikat Pemateri', volume:3, satuan:'Lembar', harga:2667},
+    {id:7, uraian:'Sertifikat Peserta', volume:260, satuan:'Lembar', harga:3000},
+    {id:8, uraian:'Piagam Penghargaan', volume:3, satuan:'Lembar', harga:5000},
+    {id:9, uraian:'Sewa Drone', volume:1, satuan:'Paket', harga:300000},
+    {id:10, uraian:'Sertifikat Pemenang', volume:28, satuan:'Lembar', harga:3000},
+    {id:11, uraian:'Memori Kamera', volume:1, satuan:'Buah', harga:330000},
+    {id:12, uraian:'Stiker Piala A3', volume:2, satuan:'Lembar', harga:20000},
+    {id:13, uraian:'Perbaikan Kamera', volume:1, satuan:'Paket', harga:200000},
+    {id:14, uraian:'Google Drive', volume:1, satuan:'Bulan', harga:35000},
+    {id:15, uraian:'Capcut & Canva Pro', volume:1, satuan:'Paket', harga:15000},
+    {id:16, uraian:'Stiker Piala A4', volume:5, satuan:'Lembar', harga:8000},
+    {id:17, uraian:'Sewa Kamera', volume:1, satuan:'Paket', harga:150000},
+    {id:18, uraian:'Sertifikat Susulan', volume:22, satuan:'Lembar', harga:3000},
+  ],
+  bon: [
+    {id:1, judul:'Keperluan Pubdok (Umum)', tanggal:'2026-02-16', penerima:'Syawal', total:1000000, items:[], images:[]},
+    {id:2, judul:'Beli Memori & Service Kamera', tanggal:'2026-03-04', penerima:'Syawal', total:500000,
+      items:[{nama:'Memori Kamera',qty:1,harga:330000},{nama:'Perbaikan Kamera',qty:1,harga:200000},{nama:'Sewa Kamera',qty:1,harga:150000}], images:[]},
+    {id:3, judul:'Cetak Spanduk', tanggal:'2026-03-06', penerima:'Syawal', total:100000,
+      items:[{nama:'Spanduk 2x1',qty:1,harga:50000},{nama:'Spanduk 3x1',qty:1,harga:50000}], images:[]},
+    {id:4, judul:'Bayar Drone', tanggal:'2026-03-06', penerima:'Syawal', total:300000, items:[], images:[]},
+    {id:5, judul:'Print Sertifikat', tanggal:'2026-03-06', penerima:'Syawal', total:6000, items:[], images:[]},
+    {id:6, judul:'Print Piagam Penghargaan', tanggal:'2026-03-06', penerima:'Syawal', total:15000,
+      items:[{nama:'Piagam Penghargaan',qty:3,harga:5000}], images:[]},
+    {id:7, judul:'Print Sertifikat & Stiker', tanggal:'2026-03-07', penerima:'Syawal', total:820000,
+      items:[
+        {nama:'Sertifikat Peserta',qty:260,harga:3000},
+        {nama:'Sertifikat Pemenang',qty:28,harga:3000},
+        {nama:'Badge Peserta',qty:42,harga:3000},
+        {nama:'Stiker Piala A3',qty:2,harga:20000},
+        {nama:'Stiker Piala A4',qty:5,harga:8000},
+      ], images:[]},
+    {id:8, judul:'Print Sertifikat Susulan', tanggal:'2026-03-12', penerima:'Syawal', total:60000,
+      items:[{nama:'Sertifikat Susulan',qty:22,harga:3000},{nama:'Sertifikat Pemateri',qty:3,harga:2667}], images:[]},
+  ],
+  nextRabId: 19,
+  nextBonId: 9,
+};
+
+let tempImages = []; // base64 images for current bon modal
+let pendingDeleteFn = null;
+
+function saveState() {
+  localStorage.setItem('pubdok_state', JSON.stringify(state));
+}
+
+const fmt = n => 'Rp ' + Math.round(n).toLocaleString('id-ID');
+const rabTotal = () => state.rab.reduce((s,i) => s + i.volume * i.harga, 0);
+const bonTotal = () => state.bon.reduce((s,b) => s + b.total, 0);
+
+// ==================== RENDER RAB ====================
+function renderRAB() {
+  const tbody = document.getElementById('rab-tbody');
+  tbody.innerHTML = '';
+  state.rab.forEach((item, idx) => {
+    const jumlah = item.volume * item.harga;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${idx+1}</td>
+      <td><strong>${item.uraian}</strong></td>
+      <td class="num">${item.volume.toLocaleString('id-ID')}</td>
+      <td>${item.satuan}</td>
+      <td class="num">${item.harga.toLocaleString('id-ID')}</td>
+      <td class="num"><strong>${jumlah.toLocaleString('id-ID')}</strong></td>
+      <td>
+        <div style="display:flex;gap:5px;">
+          <button class="btn btn-edit btn-sm" onclick="editRAB(${item.id})">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="confirmDelete('rab',${item.id},'${item.uraian}')">🗑️</button>
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('rab-total-cell').textContent = rabTotal().toLocaleString('id-ID');
+  renderRABStats();
+}
+
+function renderRABStats() {
+  const total = rabTotal();
+  const bonTot = bonTotal();
+  const selisih = total - bonTot;
+  document.getElementById('rab-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Total RAB</div><div class="stat-value">${fmt(total)}</div></div>
+    <div class="stat-card"><div class="stat-label">Total Bon</div><div class="stat-value">${fmt(bonTot)}</div></div>
+    <div class="stat-card"><div class="stat-label">Selisih / Sisa</div><div class="stat-value green">${fmt(selisih)}</div></div>
+    <div class="stat-card"><div class="stat-label">Jumlah Item</div><div class="stat-value blue">${state.rab.length} item</div></div>`;
+}
+
+// ==================== RAB CRUD ====================
+function openRABModal(id) {
+  document.getElementById('rab-edit-id').value = '';
+  document.getElementById('rab-uraian').value = '';
+  document.getElementById('rab-satuan').value = '';
+  document.getElementById('rab-volume').value = '';
+  document.getElementById('rab-harga').value = '';
+  document.getElementById('rab-modal-title').textContent = 'Tambah Item RAB';
+  document.getElementById('rab-preview').style.display = 'none';
+  if (id) {
+    const item = state.rab.find(r => r.id === id);
+    if (!item) return;
+    document.getElementById('rab-edit-id').value = id;
+    document.getElementById('rab-uraian').value = item.uraian;
+    document.getElementById('rab-satuan').value = item.satuan;
+    document.getElementById('rab-volume').value = item.volume;
+    document.getElementById('rab-harga').value = item.harga;
+    document.getElementById('rab-modal-title').textContent = 'Edit Item RAB';
+    updateRABPreview();
+  }
+  document.getElementById('rab-modal').classList.add('open');
+  ['rab-volume','rab-harga'].forEach(f => document.getElementById(f).addEventListener('input', updateRABPreview));
+}
+
+function updateRABPreview() {
+  const vol = parseFloat(document.getElementById('rab-volume').value) || 0;
+  const harga = parseFloat(document.getElementById('rab-harga').value) || 0;
+  if (vol > 0 && harga > 0) {
+    document.getElementById('rab-preview').style.display = 'block';
+    document.getElementById('rab-preview').textContent = `💡 Jumlah: ${vol} × Rp ${harga.toLocaleString('id-ID')} = Rp ${(vol*harga).toLocaleString('id-ID')}`;
+  }
+}
+
+function editRAB(id) { openRABModal(id); }
+
+function saveRAB() {
+  const id = document.getElementById('rab-edit-id').value;
+  const uraian = document.getElementById('rab-uraian').value.trim();
+  const satuan = document.getElementById('rab-satuan').value.trim();
+  const volume = parseFloat(document.getElementById('rab-volume').value) || 0;
+  const harga = parseFloat(document.getElementById('rab-harga').value) || 0;
+  if (!uraian || !satuan || volume <= 0 || harga <= 0) { alert('Harap isi semua field dengan benar.'); return; }
+  if (id) {
+    const item = state.rab.find(r => r.id == id);
+    Object.assign(item, {uraian, satuan, volume, harga});
+  } else {
+    state.rab.push({id: state.nextRabId++, uraian, satuan, volume, harga});
+  }
+  saveState(); renderRAB(); renderPembagian();
+  closeModal('rab-modal');
+}
+
+// ==================== RENDER BON ====================
+function renderBon() {
+  const grid = document.getElementById('bon-grid');
+  grid.innerHTML = '';
+  if (state.bon.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="icon">🧾</div><p>Belum ada bon. Klik Tambah Bon.</p></div>';
+    return;
+  }
+  state.bon.forEach((bon, idx) => {
+    const card = document.createElement('div');
+    card.className = 'bon-card';
+
+    let itemsHtml = '';
+    if (bon.items && bon.items.length > 0) {
+      itemsHtml = `<table class="bon-items-table">`;
+      bon.items.forEach(it => {
+        const sub = it.qty * it.harga;
+        itemsHtml += `<tr>
+          <td>${it.nama}</td>
+          <td style="color:var(--text-muted);font-size:12px;">${it.qty} × Rp ${it.harga.toLocaleString('id-ID')}</td>
+          <td class="num" style="text-align:right;">Rp ${sub.toLocaleString('id-ID')}</td>
+        </tr>`;
+      });
+      itemsHtml += `</table>`;
+    }
+
+    let imgHtml = '';
+    if (bon.images && bon.images.length > 0) {
+      imgHtml = `<div class="bon-img-section">
+        <div class="bon-img-label">📷 Foto Bon (${bon.images.length})</div>
+        <div class="bon-img-preview">`;
+      bon.images.forEach((src, i) => {
+        imgHtml += `<img class="bon-img-thumb" src="${src}" alt="foto bon" onclick="openLightbox('${bon.id}',${i})">`;
+      });
+      imgHtml += `</div></div>`;
+    }
+
+    const tanggalFmt = bon.tanggal ? new Date(bon.tanggal + 'T00:00:00').toLocaleDateString('id-ID', {day:'numeric',month:'long',year:'numeric'}) : '-';
+
+    card.innerHTML = `
+      <div class="bon-card-header">
+        <div>
+          <div class="bon-num">Bon #${idx+1}</div>
+          <div class="bon-title">${bon.judul}</div>
+          <div class="bon-date">📅 ${tanggalFmt}</div>
+        </div>
+        <div class="bon-actions">
+          <button class="btn btn-edit btn-sm" onclick="editBon(${bon.id})">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="confirmDelete('bon',${bon.id},'${bon.judul.replace(/'/g,"\\'")}')">🗑️</button>
+        </div>
+      </div>
+      <div class="bon-body">
+        ${itemsHtml}
+        <div class="bon-img-upload" style="width:100%;height:70px;flex-direction:row;gap:8px;border-radius:var(--radius-sm);" onclick="addImageToBon(${bon.id})">
+          <div class="icon" style="font-size:18px;">📷</div>
+          <div style="font-size:12px;">Tambah / Upload Foto Bon</div>
+          <input type="file" id="img-input-${bon.id}" accept="image/*" multiple style="display:none" onchange="handleAddImageToBon(this, ${bon.id})">
+        </div>
+        ${imgHtml}
+      </div>
+      <div class="bon-footer">
+        <span class="penerima-chip">👤 ${bon.penerima}</span>
+        <div style="text-align:right;">
+          <div class="bon-total-label">Total</div>
+          <div class="bon-total-amount">${fmt(bon.total)}</div>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+  renderBonStats();
+}
+
+function renderBonStats() {
+  const total = bonTotal();
+  const rabTot = rabTotal();
+  const sisa = rabTot - total;
+  document.getElementById('bon-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Total Pengeluaran</div><div class="stat-value">${fmt(total)}</div></div>
+    <div class="stat-card"><div class="stat-label">Jumlah Bon</div><div class="stat-value blue">${state.bon.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Penerima</div><div class="stat-value" style="font-size:16px;">Syawal</div></div>
+    <div class="stat-card"><div class="stat-label">Sisa Dana</div><div class="stat-value green">${fmt(sisa)}</div></div>`;
+}
+
+// ==================== BON CRUD ====================
+function openBonModal(id) {
+  tempImages = [];
+  document.getElementById('bon-edit-id').value = '';
+  document.getElementById('bon-judul').value = '';
+  document.getElementById('bon-tanggal').value = '';
+  document.getElementById('bon-penerima').value = 'Syawal';
+  document.getElementById('bon-total').value = '';
+  document.getElementById('bon-modal-title').textContent = 'Tambah Bon';
+  clearItemRows();
+  clearBonImgPreview();
+  if (id) {
+    const bon = state.bon.find(b => b.id === id);
+    if (!bon) return;
+    document.getElementById('bon-edit-id').value = id;
+    document.getElementById('bon-judul').value = bon.judul;
+    document.getElementById('bon-tanggal').value = bon.tanggal;
+    document.getElementById('bon-penerima').value = bon.penerima;
+    document.getElementById('bon-total').value = bon.total;
+    document.getElementById('bon-modal-title').textContent = 'Edit Bon';
+    clearItemRows();
+    (bon.items || []).forEach(it => addItemRow(it.nama, it.qty, it.harga));
+    tempImages = [...(bon.images || [])];
+    renderBonImgPreview();
+  }
+  document.getElementById('bon-modal').classList.add('open');
+}
+
+function editBon(id) { openBonModal(id); }
+
+function clearItemRows() {
+  const container = document.getElementById('bon-item-rows');
+  container.innerHTML = `<div class="item-row" style="background:#f8f6f0;font-size:11px;font-weight:600;color:var(--text-muted);padding:5px 10px;">
+    <span>Nama Item</span><span>Qty</span><span>Harga Satuan</span><span></span></div>`;
+}
+
+function addItemRow(nama='', qty='', harga='') {
+  const container = document.getElementById('bon-item-rows');
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Nama item" value="${nama}" oninput="autoCalcBonTotal()">
+    <input type="number" placeholder="Qty" value="${qty}" min="0" oninput="autoCalcBonTotal()">
+    <input type="number" placeholder="Harga" value="${harga}" min="0" oninput="autoCalcBonTotal()">
+    <button class="remove-item-btn" onclick="this.closest('.item-row').remove(); autoCalcBonTotal();">✕</button>`;
+  container.appendChild(row);
+}
+
+function autoCalcBonTotal() {
+  const rows = document.querySelectorAll('#bon-item-rows .item-row:not(:first-child)');
+  let total = 0;
+  rows.forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const qty = parseFloat(inputs[1].value) || 0;
+    const harga = parseFloat(inputs[2].value) || 0;
+    total += qty * harga;
+  });
+  if (total > 0) document.getElementById('bon-total').value = total;
+}
+
+function handleBonImages(input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  let loaded = 0;
+  const results = new Array(files.length);
+  files.forEach((file, i) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      results[i] = e.target.result;
+      loaded++;
+      if (loaded === files.length) {
+        results.forEach(r => tempImages.push(r));
+        renderBonImgPreview();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function clearBonImgPreview() {
+  const area = document.getElementById('bon-img-preview-area');
+  area.innerHTML = `<div class="bon-img-upload" onclick="document.getElementById('bon-images-input').click()">
+    <div class="icon">📷</div><div>Klik upload foto</div></div>`;
+}
+
+function renderBonImgPreview() {
+  const area = document.getElementById('bon-img-preview-area');
+  area.innerHTML = '';
+  tempImages.forEach((src, i) => {
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'position:relative;display:inline-block;';
+    const img = document.createElement('img');
+    img.className = 'bon-img-thumb';
+    img.src = src;
+    img.alt = 'preview';
+    const btn = document.createElement('button');
+    btn.dataset.idx = i;
+    btn.style.cssText = 'position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;';
+    btn.textContent = '✕';
+    btn.onclick = function() {
+      const idx = parseInt(this.dataset.idx);
+      tempImages.splice(idx, 1);
+      renderBonImgPreview();
+    };
+    wrapper.appendChild(img);
+    wrapper.appendChild(btn);
+    area.appendChild(wrapper);
+  });
+  const addBtn = document.createElement('div');
+  addBtn.className = 'bon-img-upload';
+  addBtn.innerHTML = '<div class="icon">📷</div><div>Tambah foto</div>';
+  addBtn.onclick = () => document.getElementById('bon-images-input').click();
+  area.appendChild(addBtn);
+}
+
+function saveBon() {
+  const id = document.getElementById('bon-edit-id').value;
+  const judul = document.getElementById('bon-judul').value.trim();
+  const tanggal = document.getElementById('bon-tanggal').value;
+  const penerima = document.getElementById('bon-penerima').value.trim() || 'Syawal';
+  const total = parseFloat(document.getElementById('bon-total').value) || 0;
+  if (!judul || !tanggal || total <= 0) { alert('Harap isi Judul, Tanggal, dan Total.'); return; }
+
+  const itemRows = document.querySelectorAll('#bon-item-rows .item-row:not(:first-child)');
+  const items = [];
+  itemRows.forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const nama = inputs[0].value.trim();
+    const qty = parseFloat(inputs[1].value) || 0;
+    const harga = parseFloat(inputs[2].value) || 0;
+    if (nama) items.push({nama, qty, harga});
+  });
+
+  if (id) {
+    const bon = state.bon.find(b => b.id == id);
+    Object.assign(bon, {judul, tanggal, penerima, total, items, images: [...tempImages]});
+  } else {
+    state.bon.push({id: state.nextBonId++, judul, tanggal, penerima, total, items, images: [...tempImages]});
+  }
+  saveState(); renderBon(); renderPembagian(); renderRABStats();
+  closeModal('bon-modal');
+}
+
+// ==================== IMAGE ADD INLINE ====================
+function addImageToBon(bonId) {
+  document.getElementById('img-input-' + bonId).click();
+}
+
+function handleAddImageToBon(input, bonId) {
+  const bon = state.bon.find(b => b.id === bonId);
+  if (!bon) return;
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  let loaded = 0;
+  const results = new Array(files.length);
+  files.forEach((file, i) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      results[i] = e.target.result;
+      loaded++;
+      if (loaded === files.length) {
+        results.forEach(r => bon.images.push(r));
+        saveState();
+        renderBon();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+// ==================== LIGHTBOX ====================
+function openLightbox(bonId, imgIdx) {
+  const bon = state.bon.find(b => b.id == bonId);
+  if (!bon || !bon.images[imgIdx]) return;
+  document.getElementById('lightbox-img').src = bon.images[imgIdx];
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+
+// ==================== CONFIRM DELETE ====================
+function confirmDelete(type, id, name) {
+  document.getElementById('confirm-msg').textContent = `Hapus "${name}"? Tindakan ini tidak bisa dibatalkan.`;
+  pendingDeleteFn = () => {
+    if (type === 'rab') {
+      state.rab = state.rab.filter(r => r.id !== id);
+      saveState(); renderRAB(); renderPembagian();
+    } else {
+      state.bon = state.bon.filter(b => b.id !== id);
+      saveState(); renderBon(); renderPembagian(); renderRABStats();
+    }
+    closeModal('confirm-modal');
+  };
+  document.getElementById('confirm-yes-btn').onclick = () => pendingDeleteFn && pendingDeleteFn();
+  document.getElementById('confirm-modal').classList.add('open');
+}
+
+// ==================== PEMBAGIAN ====================
+function renderPembagian() {
+  const bonTot = bonTotal();
+  const rabTot = rabTotal();
+  const sisa = rabTot - bonTot;
+
+  document.getElementById('pem-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Dana Diambil (RAB)</div><div class="stat-value">${fmt(rabTot)}</div></div>
+    <div class="stat-card"><div class="stat-label">Dana Terpakai</div><div class="stat-value">${fmt(bonTot)}</div></div>
+    <div class="stat-card"><div class="stat-label">Sisa Dana</div><div class="stat-value green">${fmt(sisa)}</div></div>
+    <div class="stat-card"><div class="stat-label">Efisiensi</div><div class="stat-value blue">${bonTot > 0 ? ((bonTot/rabTot)*100).toFixed(1) : 0}%</div></div>`;
+
+  // Category breakdown from RAB
+  const categories = [
+    {name: 'Print & Cetak', color: '#F5A623', ids: [3,4,5,6,7,8,10,12,16,18]},
+    {name: 'Dokumentasi (Kamera & Drone)', color: '#EF9F27', ids: [9,11,13,17]},
+    {name: 'Desain & Display', color: '#9FE1CB', ids: [1,2]},
+    {name: 'Digital (Online)', color: '#85B7EB', ids: [14,15]},
+  ];
+
+  let tbodyHtml = '';
+  let progressHtml = '';
+  const totalRAB = rabTot || 1;
+
+  categories.forEach(cat => {
+    const items = state.rab.filter(r => cat.ids.includes(r.id));
+    const amt = items.reduce((s,i) => s + i.volume*i.harga, 0);
+    const pct = ((amt/totalRAB)*100).toFixed(1);
+    const itemNames = items.map(i => i.uraian).join(', ') || '-';
+    tbodyHtml += `<tr><td><strong>${cat.name}</strong></td><td style="font-size:12px;color:var(--text-muted);">${itemNames}</td><td class="num">${amt.toLocaleString('id-ID')}</td><td class="num">${pct}%</td></tr>`;
+    progressHtml += `<div class="prog-wrap">
+      <div class="prog-head"><span class="prog-name">${cat.name}</span><span class="prog-amt">${fmt(amt)} (${pct}%)</span></div>
+      <div class="prog-bar-bg"><div class="prog-bar" style="width:${pct}%;background:${cat.color};"></div></div>
+    </div>`;
+  });
+
+  // Other items not in categories
+  const allCatIds = categories.flatMap(c => c.ids);
+  const otherItems = state.rab.filter(r => !allCatIds.includes(r.id));
+  if (otherItems.length > 0) {
+    const otherAmt = otherItems.reduce((s,i) => s + i.volume*i.harga, 0);
+    const otherPct = ((otherAmt/totalRAB)*100).toFixed(1);
+    tbodyHtml += `<tr><td><strong>Lain-lain</strong></td><td style="font-size:12px;color:var(--text-muted);">${otherItems.map(i=>i.uraian).join(', ')}</td><td class="num">${otherAmt.toLocaleString('id-ID')}</td><td class="num">${otherPct}%</td></tr>`;
+    progressHtml += `<div class="prog-wrap">
+      <div class="prog-head"><span class="prog-name">Lain-lain</span><span class="prog-amt">${fmt(otherAmt)} (${otherPct}%)</span></div>
+      <div class="prog-bar-bg"><div class="prog-bar" style="width:${otherPct}%;background:#B4B2A9;"></div></div>
+    </div>`;
+  }
+
+  tbodyHtml += `<tr style="background:var(--gold-light);font-weight:700;color:var(--gold-dark);">
+    <td colspan="2">TOTAL TERPAKAI (BON)</td>
+    <td class="num">${bonTot.toLocaleString('id-ID')}</td>
+    <td class="num">${((bonTot/totalRAB)*100).toFixed(1)}%</td></tr>`;
+  tbodyHtml += `<tr style="color:var(--green);">
+    <td colspan="2">Sisa / Efisiensi</td>
+    <td class="num">${sisa.toLocaleString('id-ID')}</td>
+    <td class="num">${((sisa/totalRAB)*100).toFixed(1)}%</td></tr>`;
+
+  document.getElementById('pem-tbody').innerHTML = tbodyHtml;
+  document.getElementById('progress-bars').innerHTML = progressHtml;
+}
+
+// ==================== MODAL HELPERS ====================
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-bg').forEach(bg => {
+  bg.addEventListener('click', e => { if (e.target === bg) bg.classList.remove('open'); });
+});
+
+// ==================== TAB SWITCH ====================
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ==================== INIT ====================
+renderRAB();
+renderBon();
+renderPembagian();
+</script>
+</body>
+</html>
